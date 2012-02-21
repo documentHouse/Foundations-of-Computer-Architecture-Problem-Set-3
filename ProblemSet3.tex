@@ -31,13 +31,45 @@
 Problem 1 \\
 \rule{500pt}{1pt}\\
 \end{flushleft} 
-\framebox{Part a}\\ 
+We can solve the problems below by converting the decimal values to their binary equivalents then converting them to the recoded versions. These values are:
+\begin{eqnarray*}
+539736088_{ten} &=& 00100000 00101011 10111000 00011000_{two} \\
+-73_{ten} &=& 11111111 11111111 11111111 10110111_{two} \\ 
+\end{eqnarray*}
+These values can be recoded as 
+\begin{eqnarray*}
+539736088_{ten} =&+& 01000000 00000000 00000000 00000000 \\
+&-&00100000 00000000 00000000 00000000 \\
+&+&00000000 01000000 00000000 00000000 \\
+&-&00000000 00100000 00000000 00000000 \\
+&+&00000000 00010000 00000000 00000000 \\
+&-&00000000 00001000 00000000 00000000 \\
+&+&00000000 00000100 00000000 00000000 \\
+&-&00000000 00000000 10000000 00000000 \\
+&+&00000000 00000000 01000000 00000000 \\
+&-&00000000 00000000 00001000 00000000 \\
+&+&00000000 00000000 00000000 00100000 \\
+&-&00000000 00000000 00000000 00001000 \\
+-73_{ten} =&+&100000000 00000000 00000000 00000000 \\
+&-&\hspace{6pt}00000000 00000000 00000000 10000000 \\
+&+&\hspace{6pt}00000000 00000000 00000000 01000000 \\
+&-&\hspace{6pt}00000000 00000000 00000000 00010000 \\
+&+&\hspace{6pt}00000000 00000000 00000000 00001000 \\
+&-&\hspace{6pt}00000000 00000000 00000000 00000001 \\
+\end{eqnarray*}
+\newpage
+
+\noindent\framebox{Part a}\\ 
+Looking at the recoded value of 539736088 we can see we would need 6 additions.\\
 
 \noindent\framebox{Part b}\\ 
+Looking at the recoded value of -73 we can see we would need 3 additions.\\
 
 \noindent\framebox{Part c}\\ 
+Looking at the recoded value of 539736088 we can see we would need 6 subtractions.\\
 
 \noindent\framebox{Part d}\\ 
+Looking at the recoded value of -73 we can see we would need 3 subtractions.\\
 
 
 \begin{flushleft} 
@@ -45,10 +77,42 @@ Problem 2 \\
 \rule{500pt}{1pt}\\
 \end{flushleft} 
 
+Looking at the MIPS floating point instruction encoding table on page 261 of we can see that with $\$f2 = 00010$ and $\$f6 = 00110$ the instruction will be encoded as \\
+\begin{tabular}{| c | c | c | c | c | c |}
+\hline
+010001 & 10000 & 00000 & 00110 & 00010 & 100000\\
+\hline
+\end{tabular}\\
+
+\noindent Now we convert to the hex representation
+\[ 0100\hspace{6pt}0110\hspace{6pt}0000\hspace{6pt}0000\hspace{6pt}0011\hspace{6pt}0000\hspace{6pt}1010\hspace{6pt}0000_{two} = 0\text{x}460030\text{A}0 \]
+
 \begin{flushleft} 
 Problem 3 \\
 \rule{500pt}{1pt}\\
 \end{flushleft} 
+
+\noindent The two's complement representation of the speed of light is 
+\[ 186262_{ten} = 00000000 00000010 11010111 10010110_{two} \]
+The gives yields the hex value directly
+\[ \$8 = 0\text{x}0002\text{D}796\]
+
+To find the floating point value first we need to convert the value to normalized form:
+\begin{eqnarray*}
+10 11010111 10010110.0 \times 2^0 = 1.0 11010111 10010110 2^{17}
+\end{eqnarray*}
+The biased exponent is $17 + 127 = 144 = 10010000_{two}$. The sign bit is 0 and the remaining 23 bits for the fraction can be read off from the normalized form above. This leads to the following encoded value\\ \\
+\begin{tabular}{| c | c | c |}
+\hline
+ 0 & 10010000 & 01101011110010110000000\\
+\hline
+\end{tabular}\\
+
+\noindent We can now convert the value to a hex representation
+\[
+ 01001000 00110101 11100101 10000000 = 0\text{x}4835\text{E}580
+\]
+\newpage
 
 \begin{flushleft} 
 Problem 4 \\
@@ -56,7 +120,34 @@ Problem 4 \\
 \end{flushleft} 
 \framebox{Part a}\\ 
 
-\noindent\framebox{Part b}\\ 
+The opcode 001000 tells us that the instruction is an add immediate. We can place the remainder of the bits in the required I-format:\\ \\
+\begin{tabular}{| c | c | c | c |}
+\hline
+001000 & 00001 & 01011 & 10111000 00011000\\
+\hline
+\end{tabular}\\
 
+The first set of 5 bits after the opcode determine the source register. The value 00001 refers to the compiler reserved register $\$at$. The second set of 5 bits refers to the destination register; the value 01011 is register $\$t3$. So the full symbolic instruction is 
+\[ \text{addi} \quad \$t3,\$at,0\text{x}\text{B}818 \]
+
+\noindent\framebox{Part b}\\ 
+The full binary for the instruction and immediate value are
+\begin{eqnarray*}
+0\text{x}202\text{BB}818 &=& 00100000001010111011100000011000_{two} \\
+550039612_{ten} &=& 00100000 11001000 11110000 00111100_{two} \\
+\end{eqnarray*}
+
+Xoring thèse values gives the result that remains in register $\$23$.
+\[ \$23 = 00000000 11100011 01001000 00100100 \]
+
+The opcode is 000000 for this instruction so we need to look at the last 6 bits to determine the 'function'. The value 100100 determines this instruction to be an \emph{and} instruction. We have an R-format instruction as follows\\
+\begin{tabular}{| c | c | c | c | c | c |}
+\hline
+000000 & 00111 & 00011 & 01001 & 00000 & 100100 \\
+\hline
+\end{tabular}\\
+
+The first set of 5 bits is the source register; 00111 is register $\$a3$. The second 5 bits is the target register; 00011 is register $\$v1$. The last 5 bits are the destination register; 01001 is register $\$t0$. So the final form of the instruction is 
+\[ \text{and} \quad \$t0,\$a3,\$v1 \]
 
 \end{document}  
